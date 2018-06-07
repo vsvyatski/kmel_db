@@ -1,6 +1,7 @@
 """Python's unittest main entry point, extended to include coverage"""
+import os
 import sys
-from unittest.main import main
+import unittest
 
 try:
     import coverage
@@ -10,15 +11,12 @@ except ImportError:
     HAVE_COVERAGE = False
 
 if sys.argv[0].endswith("__main__.py"):
-    import os.path
-
     # We change sys.argv[0] to make help message more useful
     # use executable without path, unquoted
     # (it's just a hint anyway)
     # (if you have spaces in your executable you get what you deserve!)
     executable = os.path.basename(sys.executable)
     sys.argv[0] = executable + " -m unittest"
-    del os
 
 __unittest = True
 
@@ -31,7 +29,11 @@ if HAVE_COVERAGE:
     cov.start()
 
 try:
-    main(module=None, exit=False)
+    loader = unittest.TestLoader()
+    _current_dir = os.path.dirname(__file__)
+    suite = loader.discover(_current_dir + '/../tests')
+    runner = unittest.TextTestRunner()
+    runner.run(suite)
 finally:
     if cov is not None:
         cov.stop()
