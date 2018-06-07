@@ -191,8 +191,7 @@ USAGE
 
         parser.add_argument(
             dest="paths",
-            help='''Paths to folder(s) with media file(s).
-                Default is all FAT partitions: %(default)s''',
+            help='Paths to folder(s) with media file(s). Default is all FAT partitions: %(default)s',
             metavar="path",
             nargs='*',
             default=default_mounts)
@@ -219,9 +218,7 @@ USAGE
 
         # Check for conflicting includes and excludes
         if inpat and expat and inpat == expat:
-            print(
-                'Include and Exclude pattern are equal! ' +
-                'Nothing will be processed.')
+            print('Include and Exclude pattern are equal! Nothing will be processed.')
             return -1
 
         for inpath in paths:
