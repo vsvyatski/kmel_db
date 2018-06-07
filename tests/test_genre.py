@@ -75,7 +75,6 @@ class TestGenre(unittest.TestCase):
                 genre.number_of_performers,
                 genre.performer_numbers))
 
-
             # TODO: Some meaningful check
             print('Genre {} has {} albums {}'.format(
                 genre._name[:-1],

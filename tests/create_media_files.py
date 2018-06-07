@@ -1,7 +1,6 @@
 import string
 import random
 from kmeldb import MediaFile
-from pprint import pprint
 
 
 def single_cd(

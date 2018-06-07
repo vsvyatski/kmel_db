@@ -40,7 +40,7 @@ class TestDirWalker(unittest.TestCase):
     def test_dir_walker(self):
         fat_mounts = mounts.get_fat_mounts()
 
-        if mounts:
+        if fat_mounts:
             playlists = []
             media_files = []
             dir_walker = DirWalker(fat_mounts[0][0], playlists, media_files)
