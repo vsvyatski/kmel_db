@@ -1,34 +1,34 @@
-''''''
 import struct
 import logging
 from .constants import STRING_ENCODING
 
 LOG = logging.getLogger(__name__)
 
-
-class BaseIndexEntry(object):
-    '''
+'''
     BaseIndexEntry is the super class for AlbumIndexEntry, GenreIndexEntry,
     PerformerIndexEntry and PlaylistIndexEntry.
 
     It defines attributes to hold a name, a list of media files, and an
     index number.
-    '''
+'''
 
+
+class BaseIndexEntry(object):
     FORMAT = "<HHIHHHH"
     SIZE = struct.calcsize(FORMAT)
     NAME_CHAR_LENGTH = 2
     __isfrozen = False
 
-    def __init__(self, name, titles, number):
-        '''Initialise the class.
+    '''Initialise the class.
 
-        Args:
-            name (str): The name for this instance.
-            titles (List[MediaFile]): The media files associated with this
-                instance.
-            number (int): The index number for this instance.
-        '''
+    Args:
+        name (str): The name for this instance.
+        titles (List[MediaFile]): The media files associated with this
+            instance.
+        number (int): The index number for this instance.
+    '''
+
+    def __init__(self, name, titles, number):
         self._number = number
         self._name = name + '\x00'
         self._name_length = len(self.encodedName)
@@ -41,13 +41,14 @@ class BaseIndexEntry(object):
         self._title_entry_offset = 0
 
     def __setattr__(self, key, value):
-        '''Only allow new attributes if not frozen.'''
+        # Only allow new attributes if not frozen.
         if self.__isfrozen and not hasattr(self, key):
             raise TypeError("%r is a frozen class" % self)
         object.__setattr__(self, key, value)
 
+    '''Freeze the class such that new attributes cannot be added.'''
+
     def _freeze(self):
-        '''Freeze the class such that new attributes cannot be added.'''
         self.__isfrozen = True
 
     def __str__(self):
@@ -60,7 +61,7 @@ class BaseIndexEntry(object):
 
     @property
     def name_offset(self):
-        '''int: the offset to the name'''
+        # int: the offset to the name
         return self._name_offset
 
     @name_offset.setter
@@ -80,26 +81,22 @@ class BaseIndexEntry(object):
 
     @property
     def encodedName(self):
-        ''''''
         return self._name.encode(STRING_ENCODING)
 
     @property
     def number(self):
-        ''''''
         return self._number
 
     @property
     def titles(self):
-        ''''''
         return self._titles
 
     @property
     def number_of_titles(self):
-        ''''''
         return self._num_titles
 
     def get_representation(self):
-        '''Return the data encoded ready for writing to file.'''
+        # Return the data encoded ready for writing to file.
         return struct.pack(
             self.FORMAT,
             self._name_length,
