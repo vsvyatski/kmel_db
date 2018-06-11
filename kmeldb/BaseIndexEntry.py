@@ -1,37 +1,35 @@
 import struct
 import logging
 from .constants import STRING_ENCODING
+from typing import List
+from kmeldb import MediaFile
 
 LOG = logging.getLogger(__name__)
 
-'''
-    BaseIndexEntry is the super class for AlbumIndexEntry, GenreIndexEntry,
-    PerformerIndexEntry and PlaylistIndexEntry.
-
-    It defines attributes to hold a name, a list of media files, and an
-    index number.
-'''
-
 
 class BaseIndexEntry(object):
+    """
+        BaseIndexEntry is the super class for AlbumIndexEntry, GenreIndexEntry,
+        PerformerIndexEntry and PlaylistIndexEntry.
+
+        It defines attributes to hold a name, a list of media files, and an
+        index number.
+    """
     FORMAT = "<HHIHHHH"
     SIZE = struct.calcsize(FORMAT)
     NAME_CHAR_LENGTH = 2
-    __isfrozen = False
+    __is_frozen = False
 
-    '''Initialise the class.
-
-    Args:
-        name (str): The name for this instance.
-        titles (List[MediaFile]): The media files associated with this
-            instance.
-        number (int): The index number for this instance.
-    '''
-
-    def __init__(self, name, titles, number):
+    def __init__(self, name: str, titles: List[MediaFile], number: int):
+        """
+        Initialise the class.
+        :param name: The name for this instance.
+        :param titles: The media files associated with this instance.
+        :param number: The index number for this instance.
+        """
         self._number = number
         self._name = name + '\x00'
-        self._name_length = len(self.encodedName)
+        self._name_length = len(self.encoded_name)
 
         self._num_titles = len(titles)
         self._titles = titles
@@ -42,45 +40,49 @@ class BaseIndexEntry(object):
 
     def __setattr__(self, key, value):
         # Only allow new attributes if not frozen.
-        if self.__isfrozen and not hasattr(self, key):
+        if self.__is_frozen and not hasattr(self, key):
             raise TypeError("%r is a frozen class" % self)
         object.__setattr__(self, key, value)
 
-    '''Freeze the class such that new attributes cannot be added.'''
-
     def _freeze(self):
-        self.__isfrozen = True
+        """
+        Freeze the class such that new attributes cannot be added.
+        """
+        self.__is_frozen = True
 
     def __str__(self):
-        return '{}: {} {}'.format(
-            self.__class__.__name__,
-            self._number,
-            self._name)
+        return '{}: {} {}'.format(self.__class__.__name__, self._number, self._name)
 
     # Offsets to be set when known
 
     @property
-    def name_offset(self):
-        # int: the offset to the name
+    def name_offset(self) -> int:
+        """
+        Gets the offset to the name.
+        :return:
+        """
         return self._name_offset
 
     @name_offset.setter
-    def name_offset(self, name_offset):
+    def name_offset(self, name_offset: int):
         self._name_offset = name_offset
 
     @property
-    def title_entry_offset(self):
-        '''short int: the offset to the title entry'''
+    def title_entry_offset(self) -> int:
+        """
+        short int: the offset to the title entry
+        :return:
+        """
         return self._title_entry_offset
 
     @title_entry_offset.setter
-    def title_entry_offset(self, title_entry_offset):
+    def title_entry_offset(self, title_entry_offset: int):
         self._title_entry_offset = title_entry_offset
 
     # Getters
 
     @property
-    def encodedName(self):
+    def encoded_name(self) -> bytes:
         return self._name.encode(STRING_ENCODING)
 
     @property
@@ -88,15 +90,18 @@ class BaseIndexEntry(object):
         return self._number
 
     @property
-    def titles(self):
+    def titles(self) -> List[MediaFile]:
         return self._titles
 
     @property
-    def number_of_titles(self):
+    def number_of_titles(self) -> int:
         return self._num_titles
 
     def get_representation(self):
-        # Return the data encoded ready for writing to file.
+        """
+        Return the data encoded ready for writing to file.
+        :return:
+        """
         return struct.pack(
             self.FORMAT,
             self._name_length,

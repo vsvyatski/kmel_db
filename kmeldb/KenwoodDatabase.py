@@ -283,7 +283,7 @@ class KenwoodDatabase(object):
         for giEntry in self.genreIndex:
             giEntry.name_offset = (
                 self.db_file.tell() - start_of_names)
-            self.db_file.write(giEntry.encodedName)
+            self.db_file.write(giEntry.encoded_name)
 
     def write_genre_title_table(self):
         """
@@ -369,7 +369,7 @@ class KenwoodDatabase(object):
                 self.db_file.tell() - start_of_names)
 
             # Write the name of the performer
-            self.db_file.write(piEntry.encodedName)
+            self.db_file.write(piEntry.encoded_name)
 
     def write_performer_title_table(self):
         start_of_titles = self.db_file.tell()
@@ -431,7 +431,7 @@ class KenwoodDatabase(object):
         for aiEntry in self.albumIndex:
             aiEntry.name_offset = (
                 self.db_file.tell() - start_of_names)
-            self.db_file.write(aiEntry.encodedName)
+            self.db_file.write(aiEntry.encoded_name)
 
     def write_album_title_table(self):
         start_of_titles = self.db_file.tell()
@@ -490,7 +490,7 @@ class KenwoodDatabase(object):
         for pliEntry in self.playlistIndex:
             pliEntry.name_offset = (
                 self.db_file.tell() - start_of_names)
-            self.db_file.write(pliEntry.encodedName)
+            self.db_file.write(pliEntry.encoded_name)
 
     def write_playlist_title_table(self):
         ''''''
