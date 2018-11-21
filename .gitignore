@@ -1,8 +1,8 @@
 kenwood.dap*
 xxd.kenwood.dap*
-*.pyc
 test_coverage
 .coverage
 venv/
 __pycache__/
 workspace.xml
+dist/

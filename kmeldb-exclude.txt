@@ -1,0 +1,4 @@
+__pycache__/
+generate_ioctl.*
+Makefile
+.gitignore
