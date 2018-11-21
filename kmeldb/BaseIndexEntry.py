@@ -1,8 +1,6 @@
 import struct
 import logging
 from .constants import STRING_ENCODING
-from typing import List
-from kmeldb import MediaFile
 
 LOG = logging.getLogger(__name__)
 
@@ -20,7 +18,7 @@ class BaseIndexEntry(object):
     NAME_CHAR_LENGTH = 2
     __is_frozen = False
 
-    def __init__(self, name: str, titles: List[MediaFile], number: int):
+    def __init__(self, name, titles, number):
         """
         Initialise the class.
         :param name: The name for this instance.
@@ -56,7 +54,7 @@ class BaseIndexEntry(object):
     # Offsets to be set when known
 
     @property
-    def name_offset(self) -> int:
+    def name_offset(self):
         """
         Gets the offset to the name.
         :return:
@@ -64,11 +62,11 @@ class BaseIndexEntry(object):
         return self._name_offset
 
     @name_offset.setter
-    def name_offset(self, name_offset: int):
+    def name_offset(self, name_offset):
         self._name_offset = name_offset
 
     @property
-    def title_entry_offset(self) -> int:
+    def title_entry_offset(self):
         """
         short int: the offset to the title entry
         :return:
@@ -76,13 +74,13 @@ class BaseIndexEntry(object):
         return self._title_entry_offset
 
     @title_entry_offset.setter
-    def title_entry_offset(self, title_entry_offset: int):
+    def title_entry_offset(self, title_entry_offset):
         self._title_entry_offset = title_entry_offset
 
     # Getters
 
     @property
-    def encoded_name(self) -> bytes:
+    def encoded_name(self):
         return self._name.encode(STRING_ENCODING)
 
     @property
@@ -90,11 +88,11 @@ class BaseIndexEntry(object):
         return self._number
 
     @property
-    def titles(self) -> List[MediaFile]:
+    def titles(self):
         return self._titles
 
     @property
-    def number_of_titles(self) -> int:
+    def number_of_titles(self):
         return self._num_titles
 
     def get_representation(self):
