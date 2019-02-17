@@ -14,7 +14,8 @@ def get_fat_mounts():
     if HAVE_PSUTIL:
         partitions = psutil.disk_partitions()
         for part in partitions:
-            if 'fat' in part.fstype.lower() or 'msdos' in part.fstype.lower():
+            lower_fstype = part.fstype.lower()
+            if ('fat' in lower_fstype or 'msdos' in lower_fstype) and os.access(part.mountpoint, os.R_OK | os.W_OK):
                 fat_mounts.append((part.mountpoint, part.fstype, part.device))
     else:
         mounts = os.popen('mount')
@@ -23,7 +24,7 @@ def get_fat_mounts():
             parts = line.split()
             device = parts[0]
             mountpoint = parts[2]
-            if 'fat' in line or 'msdos' in line:
+            if ('fat' in line or 'msdos' in line) and os.access(mountpoint, os.R_OK | os.W_OK):
                 fat_mounts.append((mountpoint, 'vfat', device))
         mounts.close()
     return fat_mounts
