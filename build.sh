@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 case "$BASH" in
 	*/bash)
@@ -10,7 +10,7 @@ case "$BASH" in
 esac
 
 # Let's define some colors
-if [[ ${isBash} = true ]]
+if [ ${isBash} = true ]
 then
 	clr_red=$'\e[1;31m'
 	clr_end=$'\e[0m'
@@ -50,7 +50,7 @@ done
 currentDir=$(dirname "$0")
 
 outDir="$currentDir/dist/kmeldb-cli"
-if [[ ! -d "$outDir" ]]
+if [ ! -d "$outDir" ]
 then
 	mkdir -p "$outDir"
 else
@@ -64,7 +64,7 @@ cp "$currentDir/LICENSE" "$outDir"
 
 echo Build has been successful.
 
-if [[ ${pack} = true ]]
+if [ ${pack} = true ]
 then
     echo Packing...
 
