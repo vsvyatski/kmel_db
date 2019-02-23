@@ -48,6 +48,11 @@ while getopts ":phv:" opt; do
 			usage
 			exit 1
 			;;
+		:)
+			printf "${clr_red}ERROR: Option -$OPTARG requires an argument.${clr_end}\n" 1>&2
+			usage
+			exit 1
+			;;
 	esac
 done
 
