@@ -21,16 +21,17 @@ fi
 
 usage() {
     echo 'Usage:'
-    echo '  build.sh [flags]'
+    echo '  build.sh [options]'
     echo
-    echo 'flags:'
-    echo '  -h  display this help message and exit'
-    echo '  -p  pack build results into tar.gz archive'
+    echo 'options:'
+    echo '  -h                   display this help message and exit'
+    echo '  -p                   pack build results into tar.gz archive'
+    echo '  -v <version_number>  add version number to the archive name (used with -p)'
 }
 
 pack=false
 
-while getopts ":ph" opt; do
+while getopts ":phv:" opt; do
 	case ${opt} in
 	    h)
 	        usage
@@ -38,6 +39,9 @@ while getopts ":ph" opt; do
 	        ;;
 		p)
 			pack=true
+			;;
+		v)
+			version_suffix="-$OPTARG"
 			;;
 		\?)
 			printf "${clr_red}ERROR: Unrecognized option -$OPTARG${clr_end}\n" 1>&2
@@ -69,6 +73,6 @@ then
     echo Packing...
 
     cd "$outDir"
-    tar -czf "../kmeldb-cli.tar.gz" *
+    tar -czf "../kmeldb-cli$version_suffix.tar.gz" *
     cd -
 fi
