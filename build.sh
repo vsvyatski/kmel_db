@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 case "$BASH" in
 	*/bash)
@@ -10,7 +10,7 @@ case "$BASH" in
 esac
 
 # Let's define some colors
-if [[ ${isBash} = true ]]
+if [ ${isBash} = true ]
 then
 	clr_red=$'\e[1;31m'
 	clr_end=$'\e[0m'
@@ -21,16 +21,17 @@ fi
 
 usage() {
     echo 'Usage:'
-    echo '  build.sh [flags]'
+    echo '  build.sh [options]'
     echo
-    echo 'flags:'
-    echo '  -h  display this help message and exit'
-    echo '  -p  pack build results into tar.gz archive'
+    echo 'options:'
+    echo '  -h                   display this help message and exit'
+    echo '  -p                   pack build results into tar.gz archive'
+    echo '  -v <version_number>  add version number to the archive name (used with -p)'
 }
 
 pack=false
 
-while getopts ":ph" opt; do
+while getopts ":phv:" opt; do
 	case ${opt} in
 	    h)
 	        usage
@@ -38,6 +39,9 @@ while getopts ":ph" opt; do
 	        ;;
 		p)
 			pack=true
+			;;
+		v)
+			version_suffix="-$OPTARG"
 			;;
 		\?)
 			printf "${clr_red}ERROR: Unrecognized option -$OPTARG${clr_end}\n" 1>&2
@@ -50,7 +54,7 @@ done
 currentDir=$(dirname "$0")
 
 outDir="$currentDir/dist/kmeldb-cli"
-if [[ ! -d "$outDir" ]]
+if [ ! -d "$outDir" ]
 then
 	mkdir -p "$outDir"
 else
@@ -64,11 +68,11 @@ cp "$currentDir/LICENSE" "$outDir"
 
 echo Build has been successful.
 
-if [[ ${pack} = true ]]
+if [ ${pack} = true ]
 then
     echo Packing...
 
     cd "$outDir"
-    tar -czf "../kmeldb-cli.tar.gz" *
+    tar -czf "../kmeldb-cli$version_suffix.tar.gz" *
     cd -
 fi
