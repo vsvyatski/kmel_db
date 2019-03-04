@@ -66,12 +66,15 @@ else
 	rm -r -f "$outDir/"*
 fi
 
+echo Copying files...
 rsync -a --exclude-from="$currentDir/kmeldb-exclude.txt" "$currentDir/kmeldb" "$outDir"
 cp "$currentDir/DapGen.py" "$outDir"
 cp "$currentDir/KenwoodDBReader.py" "$outDir"
 cp "$currentDir/LICENSE" "$outDir"
 
-echo Build has been successful.
+echo Generating virtual environment...
+python3 -m venv --system-site-packages "$outDir/venv"
+"$outDir/venv/bin/pip3" install -r "$currentDir/requirements.txt"
 
 if [ ${pack} = true ]
 then
@@ -81,3 +84,5 @@ then
     tar -czf "../kmeldb-cli$version_suffix.tar.gz" *
     cd -
 fi
+
+echo Build has been successful.
