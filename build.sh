@@ -72,10 +72,6 @@ cp "$currentDir/DapGen.py" "$outDir"
 cp "$currentDir/KenwoodDBReader.py" "$outDir"
 cp "$currentDir/LICENSE" "$outDir"
 
-echo Generating virtual environment...
-python3 -m venv --system-site-packages "$outDir/venv"
-"$outDir/venv/bin/pip3" install -r "$currentDir/requirements.txt"
-
 if [ ${pack} = true ]
 then
     echo Packing...
